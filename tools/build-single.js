@@ -19,8 +19,10 @@ if (fragment) js = js.replace('<button type="button" class="btn" id="dl">Ска�
 
 const title = html.match(/<title>[\s\S]*?<\/title>/)[0];
 const fonts = html.match(/<link rel="stylesheet" href="https:\/\/fonts[^>]+>/)[0];
-const body = html.slice(html.indexOf('<!--APP-START-->'), html.indexOf('<!--APP-END-->') + '<!--APP-END-->'.length);
+let body = html.slice(html.indexOf('<!--APP-START-->'), html.indexOf('<!--APP-END-->') + '<!--APP-END-->'.length);
 
+// Логотип в шапке встраиваем как data URI, чтобы файл был самодостаточным.
+body = body.replace('src="assets/img/icon-192.png"', 'src="data:image/png;base64,' + fs.readFileSync(path.join(root, 'assets/img/icon-192.png')).toString('base64') + '"');
 const head = `${title}\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n${fonts}\n<style>\n${css}\n</style>`;
 const tail = `<script>\n${js}\n</script>`;
 

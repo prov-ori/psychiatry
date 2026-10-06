@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@600;700&display=swap">
+<style>
+  /* Фирменные цвета платформы: метиленовый синий на «больничной бумаге». */
+  :root { --ink: #141a26; --ink-2: #4a5468; --accent: #2443c4; --paper: #eef1f5; --card: #ffffff; --line: #d3dae4; }
+  html, body { margin: 0; background: transparent; }
+  .og { width: 1200px; height: 630px; box-sizing: border-box; background: var(--paper); position: relative; overflow: hidden;
+        font-family: 'Golos Text', system-ui, sans-serif; color: var(--ink); }
+  .og canvas { position: absolute; }
+  .og .text { position: absolute; left: 72px; top: 0; bottom: 0; width: 600px; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .brandrow { display: flex; align-items: center; gap: 16px; }
+  .brandrow canvas { position: static; }
+  .brandrow span { font: 600 22px 'Golos Text', sans-serif; color: var(--ink-2); letter-spacing: .01em; }
+  h1 { margin: 0; font: 700 74px/1.02 'Unbounded', sans-serif; letter-spacing: -0.02em; }
+  h1 em { font-style: normal; color: var(--accent); display: block; font-size: 46px; margin-top: 14px; letter-spacing: -0.01em; }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px; }
+  .facts b { font: 600 20px 'Golos Text', sans-serif; padding: 9px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); }
+  .card { position: absolute; right: 52px; top: 55px; width: 440px; height: 520px; background: var(--card); border-radius: 36px;
+          box-shadow: 0 2px 4px rgba(20,26,38,.05), 0 24px 60px rgba(20,26,38,.12); }
+  .card small { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; font: 500 18px 'Golos Text', sans-serif; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="blot.js"></script>
+<script>
+  const SEED = 'psy-3';
+  const BLUE = '#2443c4';
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode') || 'og';
+  const size = +(params.get('size') || 512);
+
+  // Рисуем крупно и уменьшаем — так края чистые даже на 16–32 px.
+  function blotCanvas(px, color) {
+    const big = document.createElement('canvas'); big.width = big.height = 1024;
+    // Брызги на мелких иконках превращаются в шум — рисуем их только на крупных размерах.
+    drawBrandBlot(big.getContext('2d'), 0, 0, 1024, 1024, SEED, color, { compact: 0.7, splatter: 6, hideSplatter: px < 64, edge: 0.03 });
+    const c = document.createElement('canvas'); c.width = c.height = px;
+    const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(big, 0, 0, px, px);
+    return c;
+  }
+
+  function icon(px, transparent) {
+    const c = document.createElement('canvas'); c.width = c.height = px;
+    const x = c.getContext('2d');
+    if (!transparent) {
+      const r = px * 0.22;
+      x.fillStyle = BLUE;
+      x.beginPath(); x.roundRect(0, 0, px, px, r); x.fill();
+    }
+    const inner = Math.round(px * (transparent ? 1 : 0.86));
+    const off = (px - inner) / 2;
+    x.drawImage(blotCanvas(inner, transparent ? BLUE : '#ffffff'), off, off + (transparent ? 0 : px * 0.01));
+    return c;
+  }
+
+  const root = document.getElementById('root');
+  if (mode === 'icon' || mode === 'mark') {
+    root.appendChild(icon(size, mode === 'mark'));
+  } else {
+    root.innerHTML = `
+      <div class="og">
+        <div class="text">
+          <div class="brandrow"><span id="mini"></span><span>Интерактивный курс</span></div>
+          <h1>Психиатрия<em>от нуля до эксперта</em></h1>
+          <div class="facts"><b>53 урока</b><b>13 клинических случаев</b><b>60 препаратов</b></div>
+        </div>
+        <div class="card" id="card"><small>Что вы видите?</small></div>
+      </div>`;
+    document.getElementById('mini').replaceWith(icon(56));
+    const big = blotCanvas(400, BLUE);
+    big.style.cssText = "left:20px;top:40px";
+    document.getElementById('card').appendChild(big);
+  }
+  document.fonts.ready.then(() => { document.body.dataset.ready = '1'; });
+</script>
+</body>
+</html>

@@ -123,14 +123,7 @@ code, .mono { font-family: var(--f-mono); font-size: .9em; }
 }
 .brand { display: flex; gap: 12px; align-items: center; padding: 20px 20px 14px; color: var(--ink); }
 .brand:hover { text-decoration: none; }
-.brand-mark {
-  width: 34px; height: 34px; border-radius: 50%; flex: none;
-  background:
-    radial-gradient(circle at 30% 35%, var(--accent) 0 22%, transparent 23%),
-    radial-gradient(circle at 70% 35%, var(--accent) 0 22%, transparent 23%),
-    radial-gradient(ellipse at 50% 70%, var(--accent) 0 30%, transparent 31%),
-    var(--accent-soft);
-}
+.brand-mark { width: 34px; height: 34px; border-radius: 9px; flex: none; display: block; }
 .brand-text { font: 700 15px/1.1 var(--f-display); display: flex; flex-direction: column; gap: 3px; }
 .brand-text small { font: 500 11px var(--f-ui); color: var(--ink-3); letter-spacing: .02em; }
 .nav { padding: 4px 10px 24px; display: flex; flex-direction: column; gap: 1px; }
