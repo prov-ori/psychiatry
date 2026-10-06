@@ -78,7 +78,7 @@
         <div class="hero-text">
           <span class="eyebrow">Интерактивный курс психиатрии</span>
           <h1>От первого вопроса «что такое бред?» до <em>резистентной шизофрении</em> и клозапина</h1>
-          <p>${PSY.levels.length} уровней, ${total} уроков с тестами, ${PSY.cases.length} клинических случаев, тренажёры, карточки с интервальным повторением и справочники. Можно начинать без медицинского образования.</p>
+          <p>${PSY.levels.length - 1} уровней и модуль «Эстония», ${total} уроков с тестами, ${PSY.cases.length} клинических случаев, тренажёры, карточки с интервальным повторением и справочники. Эстонское право, термины на эстонском и подготовка к экзамену. Можно начинать без медицинского образования.</p>
           <div class="row">
             ${nx ? `<a class="btn btn-primary" href="#/lesson/${nx.l.id}">${ICONS.arrow}${isNew ? 'Начать с нуля' : 'Продолжить обучение'}</a>` : `<a class="btn btn-primary" href="#/exam">${ICONS.exam}Итоговый экзамен</a>`}
             <a class="btn" href="#/path">${ICONS.path}Весь путь</a>
@@ -103,7 +103,7 @@
         <div class="card continue">
           ${ring(Math.round(done / total * 100), 64)}
           <div class="continue-body">
-            <span class="eyebrow">${isNew ? 'Первый урок' : 'Следующий урок'} · уровень ${nx.lv.num}</span>
+            <span class="eyebrow">${isNew ? 'Первый урок' : 'Следующий урок'} · ${PSY.levelName(nx.lv).toLowerCase()}</span>
             <h2>${esc(nx.l.title)}</h2>
             <p class="muted">${esc(nx.l.summary || '')}</p>
           </div>
@@ -117,7 +117,7 @@
           ${PSY.levels.map(lv => {
             const p = S.levelProgress(lv.id);
             return `<a class="lv-tile" style="--c:var(--lv${lv.num})" href="#/path#${lv.id}">
-              <span class="lv-num">${lv.num}</span>
+              <span class="lv-num">${PSY.levelBadge(lv)}</span>
               <span class="lv-title">${esc(lv.title)}</span>
               ${bar(p.pct)}
               <span class="muted small">${p.done} из ${p.total}</span>
@@ -136,6 +136,8 @@
           <a class="tool" href="#/compare"><span class="tool-ico">${ICONS.chart}</span><div><b>Подбор антипсихотика</b><span>Сравните побочные эффекты под конкретного пациента</span></div></a>
           <a class="tool" href="#/mistakes"><span class="tool-ico">${ICONS.shuffle}</span><div><b>Работа над ошибками${S.mistakeQuestions().length ? ' · ' + S.mistakeQuestions().length : ''}</b><span>Повторите вопросы, на которых ошиблись</span></div></a>
           <a class="tool" href="#/exam"><span class="tool-ico">${ICONS.exam}</span><div><b>Пробный экзамен</b><span>Вопросы по выбранным уровням, с таймером</span></div></a>
+          <a class="tool" href="#/cards/et"><span class="tool-ico">${ICONS.abc}</span><div><b>Термины по-эстонски</b><span>Карточки: русский термин → эстонский и английский</span></div></a>
+          <a class="tool" href="#/path#ee"><span class="tool-ico">${ICONS.path}</span><div><b>Модуль «Эстония»</b><span>PsAS, система помощи, статус по-эстонски, экзамен</span></div></a>
         </div>
       </section>
 
@@ -144,7 +146,7 @@
         <div class="card">
           <h2 style="margin-bottom:10px">Как здесь учиться</h2>
           <div class="grid-2">
-            <p><b>1. Идите по уровням.</b> Уровень 0 не требует знаний: что такое психиатрия, норма и патология, права пациента. Дальше — мозг, язык симптомов, конкретные расстройства, лечение и экспертные темы.</p>
+            <p><b>1. Идите по уровням.</b> Уровень 0 не требует знаний: что такое психиатрия, норма и патология, права пациента. Дальше — мозг, язык симптомов, конкретные расстройства, лечение и экспертные темы. Модуль «Эстония» можно проходить параллельно.</p>
             <p><b>2. Закрепляйте.</b> После каждого урока — тест с разбором. Подчёркнутые пунктиром термины открывают определение по клику.</p>
             <p><b>3. Применяйте.</b> Клинические случаи учат решать в условиях неопределённости. Тренажёр феноменов учит слышать симптом в речи пациента.</p>
             <p><b>4. Повторяйте.</b> Карточки сами напоминают, что пора повторить. Прогресс хранится в этом браузере; перенести его можно в настройках.</p>

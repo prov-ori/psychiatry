@@ -15,11 +15,11 @@
         const p = S.levelProgress(lv.id);
         return `
         <section class="level" id="${lv.id}" style="--c:var(--lv${lv.num})">
-          <div class="level-rail"><div class="level-badge">${lv.num}</div><div class="level-line"></div></div>
+          <div class="level-rail"><div class="level-badge">${PSY.levelBadge(lv)}</div><div class="level-line"></div></div>
           <div class="level-body">
             <div class="level-head">
               <div>
-                <span class="eyebrow">Уровень ${lv.num} · ${esc(lv.audience)}</span>
+                <span class="eyebrow">${PSY.levelName(lv)} · ${esc(lv.audience)}</span>
                 <h2>${esc(lv.title)}</h2>
               </div>
               <div class="level-meta">${bar(p.pct)}<span>${p.done}/${p.total}</span></div>
@@ -29,7 +29,7 @@
               ${lv.lessons.map((l, i) => {
                 const rec = S.state.lessons[l.id];
                 return `<a class="lesson-link" href="#/lesson/${l.id}">
-                  <span class="lesson-n">${lv.num}.${i + 1}</span>
+                  <span class="lesson-n">${PSY.levelBadge(lv)}.${i + 1}</span>
                   <span class="ll-body"><b>${esc(l.title)}</b><small>${l.minutes} мин · ${l.quiz.length} ${PSY.ui.plural(l.quiz.length, 'вопрос', 'вопроса', 'вопросов')}${rec && rec.done ? ` · лучший результат ${rec.best}%` : ''}</small></span>
                   <span class="lesson-state ${rec && rec.done ? 'done' : ''}">${rec && rec.done ? ICONS.check : ''}</span>
                 </a>`;
@@ -51,11 +51,11 @@
     const rec = S.state.lessons[id];
 
     el.innerHTML = `
-      <nav class="crumbs"><a href="#/path">Путь</a><span>/</span><a href="#/path#${lv.id}">Уровень ${lv.num}. ${esc(lv.title)}</a></nav>
+      <nav class="crumbs"><a href="#/path">Путь</a><span>/</span><a href="#/path#${lv.id}">${PSY.levelName(lv)}. ${esc(lv.title)}</a></nav>
       <div class="lesson-layout">
         <article>
           <header class="lesson-head">
-            <span class="eyebrow" style="color:var(--lv${lv.num})">Урок ${lv.num}.${n} · ${lesson.minutes} мин чтения</span>
+            <span class="eyebrow" style="color:var(--lv${lv.num})">Урок ${PSY.levelBadge(lv)}.${n} · ${lesson.minutes} мин чтения</span>
             <h1>${esc(lesson.title)}</h1>
             <p class="lead">${esc(lesson.summary)}</p>
           </header>

@@ -80,6 +80,11 @@
       cards: PSY.glossary.filter(t => t.cat === c).map(t => ({ id: 'g:' + t.term, label: 'Что это?', front: t.term, back: t.def }))
     }));
     out.push({
+      id: 'et', title: 'Термины по-эстонски', desc: 'Русский термин → эстонский и английский',
+      cards: PSY.glossary.filter(t => t.et).map(t => ({ id: 'et:' + t.term, label: 'Как по-эстонски?', front: t.term, back: `<b lang="et">${esc(t.et)}</b><br><span class="muted" lang="en">${esc(t.en || '')}</span>` }))
+        .concat(PSY.disorders.filter(d => d.et).map(d => ({ id: 'etd:' + d.id, label: 'Как по-эстонски? (RHK-10)', front: d.name, back: `<b lang="et">${esc(d.et)}</b><br><span class="code">${esc(d.icd10)}</span>` })))
+    });
+    out.push({
       id: 'drugs', title: 'Препараты', desc: 'Название → класс, механизм, главное',
       cards: PSY.drugs.map(d => ({
         id: 'd:' + d.id, label: 'Класс и механизм?', front: d.name,
@@ -218,7 +223,7 @@
       </div>
       <div class="card" style="max-width:760px;display:flex;flex-direction:column;gap:18px">
         <div><b>Уровни</b><div class="check-list" id="lvls" style="margin-top:8px">
-          ${PSY.levels.map(l => `<label><input type="checkbox" value="${l.id}" checked> ${l.num}. ${esc(l.title)}</label>`).join('')}
+          ${PSY.levels.map(l => `<label><input type="checkbox" value="${l.id}" checked> ${PSY.levelBadge(l)}. ${esc(l.title)}</label>`).join('')}
         </div></div>
         <div><b>Количество вопросов</b><div class="seg" id="cnt" style="margin-top:8px">
           ${[10, 20, 40, 60].map((n, i) => `<button type="button" data-n="${n}" class="${i === 1 ? 'on' : ''}">${n}</button>`).join('')}
@@ -295,7 +300,7 @@
           <h2 style="margin-bottom:12px">По уровням</h2>
           <div class="rank-list">${byLevel.map(b => {
             const lv = PSY.levels.find(l => l.id === b.id);
-            return `<div class="rank-item" style="grid-template-columns:28px minmax(0,1fr) 120px 48px"><b>${lv.num}</b><span>${esc(lv.title)}</span>${PSY.ui.bar(Math.round(b.ok / b.n * 100))}<span class="n">${b.ok}/${b.n}</span></div>`;
+            return `<div class="rank-item" style="grid-template-columns:28px minmax(0,1fr) 120px 48px"><b>${PSY.levelBadge(lv)}</b><span>${esc(lv.title)}</span>${PSY.ui.bar(Math.round(b.ok / b.n * 100))}<span class="n">${b.ok}/${b.n}</span></div>`;
           }).join('')}</div>
         </section>
         <section class="section" style="max-width:760px">

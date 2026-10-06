@@ -56,6 +56,10 @@ PSY.glossary.forEach(t => {
   terms.add(k);
   if (!t.def || !t.cat) err(`Глоссарий: «${t.term}» без определения или раздела`);
 });
+// Эстонские эквиваленты: у каждого термина и расстройства должен быть перевод (data/terms-et.js)
+PSY.glossary.forEach(t => { if (!t.et) err(`Глоссарий: «${t.term}» без эстонского эквивалента`); });
+PSY.disorders.forEach(d => { if (!d.et) err(`Расстройство ${d.id}: нет эстонского названия`); });
+Object.keys(PSY.termsET || {}).forEach(k => { if (!PSY.term(k) || PSY.term(k).term !== k) err(`terms-et.js: термин «${k}» не найден в глоссарии`); });
 
 // Случаи
 const caseIds = new Set();

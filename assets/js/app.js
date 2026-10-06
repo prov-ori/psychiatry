@@ -107,12 +107,12 @@
   function buildIndex() {
     const items = [];
     PSY.levels.forEach(lv => lv.lessons.forEach(l => items.push({
-      kind: 'Урок', title: l.title, sub: `Уровень ${lv.num} · ${l.summary || ''}`, href: '#/lesson/' + l.id,
+      kind: 'Урок', title: l.title, sub: `${PSY.levelName(lv)} · ${l.summary || ''}`, href: '#/lesson/' + l.id,
       text: (l.title + ' ' + (l.summary || '') + ' ' + (l.keyPoints || []).join(' ')).toLowerCase()
     })));
     PSY.glossary.forEach(t => items.push({
       kind: 'Термин', title: t.term, sub: strip(t.def).slice(0, 110), href: '#/glossary/' + encodeURIComponent(t.term),
-      text: (t.term + ' ' + (t.aliases || []).join(' ') + ' ' + strip(t.def)).toLowerCase()
+      text: (t.term + ' ' + (t.aliases || []).join(' ') + ' ' + (t.et || '') + ' ' + (t.en || '') + ' ' + strip(t.def)).toLowerCase()
     }));
     PSY.drugs.forEach(d => items.push({
       kind: 'Препарат', title: d.name, sub: d.class, href: '#/drug/' + d.id,
