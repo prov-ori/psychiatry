@@ -45,6 +45,7 @@
       <img class="brand-mark" src="assets/img/icon-192.png" width="34" height="34" alt="">
       <span class="brand-text">Психиатрия<small>от нуля до эксперта</small></span>
     </a>
+    <button class="icon-btn side-close" id="sideClose" type="button" aria-label="Закрыть меню"></button>
     <nav class="nav" id="nav"></nav>
   </aside>
   <div class="main">
@@ -70,7 +71,10 @@
 <div class="scrim" id="scrim" hidden></div>
 <div class="modal" id="searchModal" hidden role="dialog" aria-modal="true" aria-label="Поиск">
   <div class="modal-box search-box">
-    <input id="searchInput" type="search" placeholder="Термин, препарат, расстройство, урок…" autocomplete="off">
+    <div class="search-head">
+      <input id="searchInput" type="search" placeholder="Термин, препарат, расстройство, урок…" autocomplete="off" aria-label="Поиск">
+      <button class="icon-btn" id="searchClose" type="button" aria-label="Закрыть поиск"></button>
+    </div>
     <div id="searchResults" class="search-results"></div>
   </div>
 </div>

@@ -157,5 +157,11 @@
     const paint = () => { try { drawBlot(canvas, seed); } catch (e) { /* canvas недоступен */ } };
     requestAnimationFrame(paint);
     canvas.addEventListener('click', () => { seed = String(Math.random()); paint(); });
+    // Пятно рисуется цветами темы — перерисовываем при её смене (в том числе системной).
+    const repaint = () => { if (!document.body.contains(canvas)) { cleanup(); return; } requestAnimationFrame(paint); };
+    const mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    const cleanup = () => { document.removeEventListener('psy:theme', repaint); if (mq && mq.removeEventListener) mq.removeEventListener('change', repaint); };
+    document.addEventListener('psy:theme', repaint);
+    if (mq && mq.addEventListener) mq.addEventListener('change', repaint);
   };
 })();

@@ -41,7 +41,12 @@
           <p>${esc(d.short)}</p>
         </a>`).join('') || '<p class="muted">Ничего не найдено.</p>';
     };
-    el.querySelector('#pq').addEventListener('input', e => { q = e.target.value.trim().toLowerCase(); draw(); });
+    el.querySelector('#pq').addEventListener('input', e => {
+      q = e.target.value.trim().toLowerCase();
+      // Поиск идёт по всем группам, иначе препарат «пропадает» из-за ранее выбранного фильтра.
+      if (q && g !== 'all') { g = 'all'; el.querySelectorAll('#pg button').forEach(x => x.classList.toggle('on', x.dataset.g === 'all')); }
+      draw();
+    });
     el.querySelector('#pg').addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
       g = b.dataset.g;
