@@ -86,7 +86,8 @@
       if (navigator.clipboard) navigator.clipboard.writeText(exp.value).then(done, () => { exp.select(); PSY.ui.toast('Выделите и скопируйте вручную'); });
       else { exp.select(); }
     });
-    el.querySelector('#dl').addEventListener('click', () => {
+    const dl = el.querySelector('#dl');
+    if (dl) dl.addEventListener('click', () => {
       try {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([exp.value], { type: 'application/json' }));
