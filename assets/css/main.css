@@ -230,6 +230,7 @@ a.card:hover { text-decoration: none; border-color: var(--accent); }
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 500;
   background: var(--surface-2); color: var(--ink-2); white-space: nowrap;
 }
+.drug-card .tag { white-space: normal; max-width: 100%; align-self: flex-start; }
 .tag-accent { background: var(--accent-soft); color: var(--accent); }
 .tag-ok { background: var(--ok-soft); color: var(--ok); }
 .tag-warn { background: var(--warn-soft); color: var(--warn); }
@@ -249,7 +250,8 @@ a.card:hover { text-decoration: none; border-color: var(--accent); }
 }
 textarea.input { font-family: var(--f-mono); font-size: 12px; min-height: 160px; }
 .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
-.toolbar .input { flex: 1; min-width: 200px; max-width: 420px; }
+.toolbar .input { flex: 1 1 200px; min-width: 0; max-width: 420px; }
+.toolbar > .btn { white-space: normal; }
 .seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: var(--surface-2); border-radius: 10px; }
 .seg button { border: 0; background: transparent; padding: 6px 12px; border-radius: 7px; font: 500 13px var(--f-ui); color: var(--ink-2); cursor: pointer; }
 .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
