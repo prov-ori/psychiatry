@@ -12,6 +12,7 @@
     { href: '#/symptoms', id: 'symptoms', icon: 'eye', label: 'Тренажёр феноменов' },
     { href: '#/cards', id: 'cards', icon: 'cards', label: 'Карточки' },
     { href: '#/daily', id: 'daily', icon: 'bolt', label: 'Вызов дня' },
+    { href: '#/mistakes', id: 'mistakes', icon: 'shuffle', label: 'Работа над ошибками' },
     { href: '#/exam', id: 'exam', icon: 'exam', label: 'Экзамен' },
     { group: 'Справочники' },
     { href: '#/disorders', id: 'disorders', icon: 'brain', label: 'Расстройства' },

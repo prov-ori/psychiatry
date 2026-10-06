@@ -86,8 +86,8 @@
             </div>
           </div>
           <div class="card toc-card"><div class="eyebrow" style="margin-bottom:8px">Содержание</div><nav class="toc" id="toc"></nav></div>
-          ${lesson.related && lesson.related.length ? `<div class="card"><div class="eyebrow" style="margin-bottom:8px">Связанное</div>
-            <div class="toc">${lesson.related.map(r => `<a href="${r.href}">${esc(r.label)}</a>`).join('')}</div></div>` : ''}
+          ${related(lesson).length ? `<div class="card"><div class="eyebrow" style="margin-bottom:8px">Связанное</div>
+            <div class="toc">${related(lesson).map(r => `<a href="${r.href}"><span class="muted small">${r.kind}</span> ${esc(r.label)}</a>`).join('')}</div></div>` : ''}
         </aside>
       </div>`;
 
@@ -116,6 +116,15 @@
     runQuiz(el, lesson, next);
   };
 
+  // Клинические случаи, расстройства и препараты, которые ссылаются на урок.
+  function related(lesson) {
+    const out = (lesson.related || []).map(r => Object.assign({ kind: '' }, r));
+    PSY.cases.filter(c => (c.links || []).includes(lesson.id)).forEach(c => out.push({ kind: 'Случай', label: c.title, href: '#/case/' + c.id }));
+    PSY.disorders.filter(d => d.lesson === lesson.id).forEach(d => out.push({ kind: 'Расстройство', label: d.name, href: '#/disorder/' + d.id }));
+    PSY.drugs.filter(d => d.lesson === lesson.id).forEach(d => out.push({ kind: 'Препарат', label: d.name, href: '#/drug/' + d.id }));
+    return out.slice(0, 12);
+  }
+
   function runQuiz(el, lesson, next) {
     const list = el.querySelector('#qList');
     const out = el.querySelector('#qResult');
@@ -124,6 +133,7 @@
     lesson.quiz.forEach((q, i) => question(list, q, {
       number: `Вопрос ${i + 1} из ${lesson.quiz.length}`,
       onAnswer(ok) {
+        S.recordAnswer(lesson.id + '#' + i, ok);
         answered++; if (ok) correct++;
         if (answered === lesson.quiz.length) {
           const res = S.completeLesson(lesson.id, correct, lesson.quiz.length);

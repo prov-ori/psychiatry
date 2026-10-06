@@ -32,6 +32,7 @@
       activity: {},     // 'YYYY-MM-DD' -> xp
       achievements: {}, // id -> timestamp
       scalesUsed: {},
+      mistakes: {},     // 'урок#номер' -> { at, n } — вопросы, на которые ответили неверно
       visited: {},
       settings: { theme: 'system' },
       createdAt: Date.now()
@@ -150,6 +151,24 @@
     if (first) addXP(30 + score * 5, 'вызов дня');
   }
 
+  // Работа над ошибками: неверный ответ добавляет вопрос, верный — убирает.
+  function recordAnswer(key, ok) {
+    if (!key) return;
+    if (!state.mistakes) state.mistakes = {};
+    if (ok) { if (state.mistakes[key]) { delete state.mistakes[key]; save(); } return; }
+    const m = state.mistakes[key] || { n: 0 };
+    state.mistakes[key] = { at: Date.now(), n: m.n + 1 };
+    save();
+  }
+  function mistakeQuestions() {
+    return Object.keys(state.mistakes || {}).map(key => {
+      const [lessonId, idx] = key.split('#');
+      const l = PSY.lesson(lessonId);
+      const q = l && l.quiz[+idx];
+      return q ? Object.assign({}, q, { key, lessonId, lessonTitle: l.title }) : null;
+    }).filter(Boolean);
+  }
+
   function markScale(id) { state.scalesUsed[id] = Date.now(); save(); checkAchievements(); }
   function visit(section) {
     if (!state.visited[section]) { state.visited[section] = Date.now(); save(); checkAchievements(); }
@@ -217,7 +236,7 @@
     get state() { return state; },
     RANKS, ACH, SRS_DAYS,
     today, rank, streak, addXP, completeLesson, finishCase,
-    card, isDue, rateCard, recordSymptom, recordExam, recordDaily,
+    card, isDue, rateCard, recordSymptom, recordExam, recordDaily, recordAnswer, mistakeQuestions,
     markScale, visit, checkAchievements, setTheme, exportJSON, importJSON, reset,
     doneCount: () => doneCount(state),
     levelProgress(id) {

@@ -206,7 +206,7 @@
   /* ---------- Экзамен ---------- */
   function questionsFor(levelIds) {
     return PSY.levels.filter(l => levelIds.includes(l.id))
-      .flatMap(l => l.lessons.flatMap(ls => ls.quiz.map(q => Object.assign({}, q, { levelId: l.id, lessonId: ls.id }))));
+      .flatMap(l => l.lessons.flatMap(ls => ls.quiz.map((q, i) => Object.assign({}, q, { levelId: l.id, lessonId: ls.id, key: ls.id + '#' + i }))));
   }
 
   PSY.views.exam = function (el) {
@@ -268,6 +268,7 @@
       question(slot, pool[i], {
         mode: 'exam',
         onAnswer(ok, chosen) {
+          S.recordAnswer(pool[i].key, ok);
           answers[i] = { ok, chosen };
           i++;
           setTimeout(show, 250);
@@ -316,11 +317,35 @@
     show();
   }
 
+  /* ---------- Работа над ошибками ---------- */
+  PSY.views.mistakes = function (el) {
+    const list = shuffle(S.mistakeQuestions());
+    el.innerHTML = `
+      <div class="page-head">
+        <span class="eyebrow">Работа над ошибками</span>
+        <h1>${list.length ? `${list.length} ${plural(list.length, 'вопрос ждёт', 'вопроса ждут', 'вопросов ждут')} повторения` : 'Ошибок для повторения нет'}</h1>
+        <p>Сюда попадают вопросы из уроков, экзамена и вызова дня, на которые вы ответили неверно. Верный ответ убирает вопрос из списка. Повторное извлечение из памяти — один из самых эффективных способов учиться.</p>
+      </div>
+      <div class="quiz" style="margin-top:0" id="ml"></div>`;
+    const box = el.querySelector('#ml');
+    if (!list.length) {
+      box.innerHTML = `<div class="card"><p class="muted">Пройдите тесты уроков, экзамен или вызов дня — неверные ответы появятся здесь.</p>
+        <div class="row" style="margin-top:12px"><a class="btn btn-primary" href="#/exam">${ICONS.exam}Экзамен</a><a class="btn" href="#/daily">${ICONS.bolt}Вызов дня</a></div></div>`;
+      return;
+    }
+    list.forEach((q, k) => {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `<div class="muted small" style="margin-bottom:6px">Урок: <a href="#/lesson/${q.lessonId}">${esc(q.lessonTitle)}</a></div>`;
+      box.appendChild(wrap);
+      question(wrap, q, { number: `${k + 1} / ${list.length}`, onAnswer(ok) { S.recordAnswer(q.key, ok); if (ok) S.addXP(3); } });
+    });
+  };
+
   /* ---------- Вызов дня ---------- */
   PSY.views.daily = function (el) {
     const key = S.today();
     const rnd = seeded('daily-' + key);
-    const qs = shuffle(PSY.allLessons().flatMap(l => l.quiz.map(q => Object.assign({}, q, { lessonId: l.id }))), rnd).slice(0, 5);
+    const qs = shuffle(PSY.allLessons().flatMap(l => l.quiz.map((q, i) => Object.assign({}, q, { lessonId: l.id, key: l.id + '#' + i }))), rnd).slice(0, 5);
     const sym = PSY.symptoms[Math.floor(rnd() * PSY.symptoms.length)];
     const pool = qs.concat(sym ? [symptomQuestion(sym, rnd)] : []);
     const prevScore = S.state.daily[key];
@@ -337,6 +362,7 @@
     pool.forEach((q, k) => question(list, q, {
       number: `${k + 1} / ${pool.length}`,
       onAnswer(ok) {
+        S.recordAnswer(q.key, ok);
         answered++; if (ok) right++;
         if (answered === pool.length) {
           S.recordDaily(right);
