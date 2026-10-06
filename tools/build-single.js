@@ -13,7 +13,9 @@ const outPath = out ? out.slice(6) : path.join(root, 'dist', fragment ? 'psychia
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'assets/css/main.css'), 'utf8');
 const scripts = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]);
-const js = scripts.map(s => `/* ${s} */\n` + fs.readFileSync(path.join(root, s), 'utf8').replace(/<\/script/gi, '<\\/script')).join('\n;\n');
+let js = scripts.map(s => `/* ${s} */\n` + fs.readFileSync(path.join(root, s), 'utf8').replace(/<\/script/gi, '<\\/script')).join('\n;\n');
+// Во встраиваемой версии скачивание файлов недоступно — оставляем только копирование кода прогресса.
+if (fragment) js = js.replace('<button type="button" class="btn" id="dl">Скачать файлом</button>', '');
 
 const title = html.match(/<title>[\s\S]*?<\/title>/)[0];
 const fonts = html.match(/<link rel="stylesheet" href="https:\/\/fonts[^>]+>/)[0];
