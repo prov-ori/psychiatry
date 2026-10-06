@@ -213,7 +213,7 @@ code, .mono { font-family: var(--f-mono); font-size: .9em; }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .btn-primary:hover { border-color: var(--accent); filter: brightness(1.08); }
 .btn-danger { color: var(--bad); border-color: var(--bad); }
-.btn-ghost { background: transparent; border-color: transparent; color: var(--ink-2); }
+.btn-ghost { white-space: normal; text-align: left; background: transparent; border-color: transparent; color: var(--ink-2); }
 .btn-ghost:hover { background: var(--surface-2); border-color: transparent; }
 .btn svg { width: 18px; height: 18px; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
@@ -359,7 +359,7 @@ tr:last-child td { border-bottom: 0; }
 .lesson-aside .card { padding: 16px; }
 .toc a { display: block; padding: 4px 0; color: var(--ink-2); font-size: 13.5px; }
 .toc a:hover { color: var(--accent); }
-@media (max-width: 1100px) { .lesson-layout { grid-template-columns: 1fr; } .lesson-aside { position: static; } .toc-card { display: none; } }
+@media (max-width: 1100px) { .lesson-layout { grid-template-columns: minmax(0, 1fr); } .lesson-aside { position: static; } .toc-card { display: none; } }
 .lesson-head { margin-bottom: 26px; display: flex; flex-direction: column; gap: 10px; max-width: 68ch; }
 .lesson-head .lead { font: 400 18px/1.55 var(--f-read); color: var(--ink-2); }
 .prose { font: 400 17px/1.72 var(--f-read); max-width: 68ch; }
@@ -390,6 +390,7 @@ tr:last-child td { border-bottom: 0; }
 .keypoints ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .keypoints li { display: flex; gap: 10px; align-items: flex-start; }
 .keypoints li::before { content: ''; flex: none; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); margin-top: 8px; transform: rotate(45deg); }
+.lesson-nav .btn { white-space: normal; text-align: left; max-width: 100%; }
 .lesson-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; flex-wrap: wrap; max-width: 68ch; }
 
 /* ---------- Тест ---------- */

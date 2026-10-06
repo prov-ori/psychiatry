@@ -25,19 +25,19 @@
     };
     const ci = toRGB(ink), cp = toRGB(paper);
     const blobs = [];
-    const n = 16 + Math.floor(rnd() * 14);
+    const n = 26 + Math.floor(rnd() * 16);
     for (let i = 0; i < n; i++) {
-      const spread = Math.pow(rnd(), 1.4);
+      const spread = Math.pow(rnd(), 0.9);
       blobs.push({
-        x: spread * W * 0.34,
-        y: H * (0.12 + rnd() * 0.76),
-        s: (0.025 + rnd() * 0.075) * W,
-        w: 0.5 + rnd() * 0.9
+        x: spread * W * 0.36,
+        y: H * (0.16 + rnd() * 0.68),
+        s: (0.012 + Math.pow(rnd(), 1.6) * 0.05) * W,
+        w: 0.45 + rnd() * 0.5
       });
     }
     // Брызги
-    for (let i = 0; i < 18; i++) {
-      blobs.push({ x: W * (0.1 + rnd() * 0.32), y: H * (0.05 + rnd() * 0.9), s: (0.004 + rnd() * 0.01) * W, w: 1.2 });
+    for (let i = 0; i < 14; i++) {
+      blobs.push({ x: W * (0.06 + rnd() * 0.36), y: H * (0.08 + rnd() * 0.84), s: (0.003 + rnd() * 0.006) * W, w: 1.3 });
     }
     const f1 = 0.02 + rnd() * 0.03, f2 = 0.03 + rnd() * 0.04, ph = rnd() * 6.28;
     const img = ctx.createImageData(W, H);
@@ -50,8 +50,8 @@
           const ex = dx - b.x, ey = y - b.y;
           v += b.w * Math.exp(-(ex * ex + ey * ey) / (2 * b.s * b.s));
         }
-        v += 0.06 * Math.sin(dx * f1 + ph) * Math.cos(y * f2 - ph);
-        const a = Math.min(1, Math.max(0, (v - 0.46) / 0.08));
+        v += 0.1 * Math.sin(dx * f1 + ph) * Math.cos(y * f2 - ph) + 0.05 * Math.sin(dx * f2 * 2.7 + y * f1 * 3.1);
+        const a = Math.min(1, Math.max(0, (v - 0.55) / 0.06));
         const k = (y * W + x) * 4;
         img.data[k] = cp[0] + (ci[0] - cp[0]) * a;
         img.data[k + 1] = cp[1] + (ci[1] - cp[1]) * a;
