@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Психиатрия: от нуля до эксперта</title>
+<meta name="description" content="Интерактивная платформа для изучения психиатрии: путь обучения из 6 уровней, клинические случаи, тренажёры, карточки, справочники препаратов и расстройств.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<!--APP-START-->
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar" aria-label="Навигация">
+    <a class="brand" href="#/">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">Психиатрия<small>от нуля до эксперта</small></span>
+    </a>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Открыть меню" type="button"></button>
+      <button class="search-trigger" id="searchBtn" type="button">
+        <span class="search-ico" aria-hidden="true"></span>
+        <span>Поиск по платформе</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+      <div class="topbar-right">
+        <a class="xp-chip" id="xpChip" href="#/achievements" title="Ваш ранг и опыт"></a>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Сменить тему"></button>
+      </div>
+    </header>
+    <main class="view" id="view" tabindex="-1"></main>
+    <footer class="foot">
+      Учебный ресурс. Не заменяет консультацию врача и официальные клинические рекомендации.
+      Если вам или близкому сейчас плохо — звоните <b>112</b>.
+    </footer>
+  </div>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+<div class="modal" id="searchModal" hidden role="dialog" aria-modal="true" aria-label="Поиск">
+  <div class="modal-box search-box">
+    <input id="searchInput" type="search" placeholder="Термин, препарат, расстройство, урок…" autocomplete="off">
+    <div id="searchResults" class="search-results"></div>
+  </div>
+</div>
+<div class="popover" id="termPop" hidden role="tooltip"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<!--APP-END-->
+
+<!--SCRIPTS-START-->
+<script src="assets/js/core.js"></script>
+<script src="data/curriculum-0.js"></script>
+<script src="data/curriculum-1.js"></script>
+<script src="data/curriculum-2.js"></script>
+<script src="data/curriculum-3a.js"></script>
+<script src="data/curriculum-3b.js"></script>
+<script src="data/curriculum-4.js"></script>
+<script src="data/curriculum-5.js"></script>
+<script src="data/glossary.js"></script>
+<script src="data/drugs.js"></script>
+<script src="data/disorders.js"></script>
+<script src="data/cases.js"></script>
+<script src="data/symptoms.js"></script>
+<script src="data/scales.js"></script>
+<script src="data/timeline.js"></script>
+<script src="data/mnemonics.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/views/home.js"></script>
+<script src="assets/js/views/learn.js"></script>
+<script src="assets/js/views/cases.js"></script>
+<script src="assets/js/views/practice.js"></script>
+<script src="assets/js/views/reference.js"></script>
+<script src="assets/js/views/pharm.js"></script>
+<script src="assets/js/views/profile.js"></script>
+<script src="assets/js/app.js"></script>
+<!--SCRIPTS-END-->
+</body>
+</html>
