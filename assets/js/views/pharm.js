@@ -76,7 +76,7 @@
         ${d.monitoring ? `<dt>Мониторинг</dt><dd>${d.monitoring}</dd>` : ''}
         ${d.interactions ? `<dt>Взаимодействия</dt><dd>${d.interactions}</dd>` : ''}
         <dt>Главное</dt><dd>${d.pearl}</dd>
-        ${d.ru ? `<dt>В России</dt><dd>${d.ru}</dd>` : ''}
+        ${d.ee ? `<dt>В Эстонии</dt><dd>${d.ee}</dd>` : ''}
       </dl>
       ${d.profile ? `<section class="section" style="max-width:860px"><h2 style="margin-bottom:12px">Профиль побочных эффектов</h2>
         <div class="table-wrap"><table class="heat"><thead><tr>${PROFILE.map(p => `<th>${p.label}</th>`).join('')}</tr></thead>

@@ -170,7 +170,7 @@
   }
   function showTerm(anchor, term) {
     const pop = document.getElementById('termPop');
-    pop.innerHTML = `<div class="pop-term">${esc(term.term)}</div><div class="pop-def">${term.def}</div>
+    pop.innerHTML = `<div class="pop-term">${esc(term.term)}</div>${term.et ? `<div class="pop-et"><span lang="et">${esc(term.et)}</span>${term.en ? ` · <span lang="en">${esc(term.en)}</span>` : ''}</div>` : ''}<div class="pop-def">${term.def}</div>
       <a class="pop-link" href="#/glossary/${encodeURIComponent(term.term)}">Открыть в глоссарии</a>`;
     pop.hidden = false;
     const r = anchor.getBoundingClientRect();

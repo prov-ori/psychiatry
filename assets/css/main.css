@@ -24,6 +24,7 @@
   --lv3: #b0472f;
   --lv4: #2443c4;
   --lv5: #1c2233;
+  --lv6: #0072ce;
   --shadow: 0 1px 2px rgba(20, 26, 38, .06), 0 6px 20px rgba(20, 26, 38, .06);
 
   --f-display: 'Unbounded', 'Golos Text', system-ui, sans-serif;
@@ -59,6 +60,7 @@
     --lv3: #f09a82;
     --lv4: #8ea2ff;
     --lv5: #d9deea;
+    --lv6: #5aa9f0;
     --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
     color-scheme: dark;
   }
@@ -86,6 +88,7 @@
   --lv3: #f09a82;
   --lv4: #8ea2ff;
   --lv5: #d9deea;
+  --lv6: #5aa9f0;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
   color-scheme: dark;
 }
@@ -222,9 +225,10 @@ a.card:hover { text-decoration: none; border-color: var(--accent); }
 .grid-2 { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
 .tag {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 500;
-  background: var(--surface-2); color: var(--ink-2); white-space: nowrap;
+  background: var(--surface-2); color: var(--ink-2); white-space: nowrap; max-width: 100%;
 }
 .drug-card .tag { white-space: normal; max-width: 100%; align-self: flex-start; }
+.row .tag { white-space: normal; }
 .tag-accent { background: var(--accent-soft); color: var(--accent); }
 .tag-ok { background: var(--ok-soft); color: var(--ok); }
 .tag-warn { background: var(--warn-soft); color: var(--warn); }
@@ -270,6 +274,10 @@ tr:last-child td { border-bottom: 0; }
 .popover { position: absolute; z-index: 70; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); font-size: 14px; }
 .pop-term { font-weight: 700; margin-bottom: 4px; }
 .pop-def { color: var(--ink-2); }
+.pop-et { font-size: .86em; color: var(--accent); margin-bottom: 6px; }
+.gloss-et { font-size: .9em; color: var(--ink-2); margin: 2px 0 6px; }
+.gloss-et .lang { font: 600 .72em 'JetBrains Mono', monospace; color: var(--accent); border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; margin-right: 2px; }
+.gloss-et .lang + span { margin-right: 8px; }
 .pop-link { display: inline-block; margin-top: 8px; font-size: 13px; }
 
 .modal { position: fixed; inset: 0; z-index: 60; display: flex; justify-content: center; align-items: flex-start; padding: calc(10vh + env(safe-area-inset-top, 0px)) 16px 16px; pointer-events: none; }

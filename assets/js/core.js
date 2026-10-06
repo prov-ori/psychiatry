@@ -31,6 +31,9 @@ window.PSY = {
   levelOf(lessonId) {
     return this.levels.find(l => l.lessons.some(ls => ls.id === lessonId));
   },
+  // Подпись уровня: у модулей вне основной шкалы (например, «Эстония») свой значок и название.
+  levelBadge(lv) { return lv.badge || String(lv.num); },
+  levelName(lv) { return lv.kind || ('Уровень ' + lv.num); },
   term(key) {
     const k = String(key).toLowerCase();
     return this.glossary.find(t => t.term.toLowerCase() === k || (t.aliases || []).some(a => a.toLowerCase() === k));

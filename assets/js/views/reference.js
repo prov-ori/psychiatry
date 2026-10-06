@@ -12,7 +12,7 @@
       <div class="page-head">
         <span class="eyebrow">Глоссарий</span>
         <h1>${PSY.glossary.length} терминов психиатрии</h1>
-        <p>Язык психопатологии точен: «бред» и «навязчивость» — разные вещи, и от этого различия зависит диагноз. Термины в уроках открываются отсюда по клику.</p>
+        <p>Язык психопатологии точен: «бред» и «навязчивость» — разные вещи, и от этого различия зависит диагноз. У каждого термина есть эстонский (ET) и английский (EN) эквивалент — на эстонском идут лекции и экзамены, на английском написана литература. Поиск работает на всех трёх языках.</p>
       </div>
       <div class="toolbar">
         <input class="input" id="gq" type="search" placeholder="Найти термин…" value="">
@@ -23,7 +23,7 @@
     const list = el.querySelector('#glist');
     function draw() {
       const items = PSY.glossary
-        .filter(t => (cat === 'all' || t.cat === cat) && (!q || (t.term + ' ' + (t.aliases || []).join(' ') + ' ' + t.def).toLowerCase().includes(q)))
+        .filter(t => (cat === 'all' || t.cat === cat) && (!q || (t.term + ' ' + (t.aliases || []).join(' ') + ' ' + (t.et || '') + ' ' + (t.en || '') + ' ' + t.def).toLowerCase().includes(q)))
         .sort((a, b) => a.term.localeCompare(b.term, 'ru'));
       const groups = {};
       items.forEach(t => { const L = t.term[0].toUpperCase(); (groups[L] = groups[L] || []).push(t); });
@@ -31,6 +31,7 @@
       el.querySelector('#alpha').innerHTML = letters.map(L => `<a href="#" data-l="${L}">${L}</a>`).join('');
       list.innerHTML = letters.map(L => `<div class="letter" id="L-${L}">${L}</div><div class="gloss-list">${groups[L].map(t => `
         <div class="gloss" id="g-${esc(t.term)}"><h3>${esc(t.term)} <span class="tag">${esc(t.cat)}</span></h3>
+        ${t.et ? `<div class="gloss-et"><span class="lang">ET</span> <span lang="et">${esc(t.et)}</span>${t.en ? ` <span class="lang">EN</span> <span lang="en">${esc(t.en)}</span>` : ''}</div>` : ''}
         ${t.aliases && t.aliases.length ? `<div class="muted small">Также: ${esc(t.aliases.join(', '))}</div>` : ''}
         <p>${t.def}</p></div>`).join('')}</div>`).join('') || '<p class="muted">Ничего не найдено.</p>';
       PSY.ui.bindTerms(list);
@@ -58,14 +59,14 @@
       <div class="page-head">
         <span class="eyebrow">Справочник расстройств</span>
         <h1>${PSY.disorders.length} расстройств: коды, критерии, лечение</h1>
-        <p>Краткие клинические карточки с кодами МКБ-10 (действует в РФ) и МКБ-11 (вступила в силу в ВОЗ с 2022 года). Критерии изложены своими словами и упрощены — для обучения, не для экспертизы.</p>
+        <p>Краткие клинические карточки с кодами МКБ-10 (в Эстонии действует как RHK-10) и МКБ-11 (вступила в силу в ВОЗ с 2022 года). Критерии изложены своими словами и упрощены — для обучения, не для экспертизы.</p>
       </div>
       <div class="toolbar"><input class="input" id="dq" type="search" placeholder="Название или код: F32, 6A20…"></div>
       <div id="dlist"></div>`;
     const box = el.querySelector('#dlist');
     function draw() {
       box.innerHTML = sections.map(sec => {
-        const items = PSY.disorders.filter(d => d.section === sec && (!q || (d.name + d.icd10 + d.icd11 + (d.aka || '')).toLowerCase().includes(q)));
+        const items = PSY.disorders.filter(d => d.section === sec && (!q || (d.name + d.icd10 + d.icd11 + (d.aka || '') + (d.et || '')).toLowerCase().includes(q)));
         if (!items.length) return '';
         return `<section class="section" style="margin-top:22px"><h2 style="margin-bottom:12px;font-size:18px">${esc(sec)}</h2><div class="grid">
           ${items.map(d => `<a class="card drug-card" href="#/disorder/${d.id}">
@@ -89,6 +90,7 @@
       <div class="page-head">
         <div class="row" style="gap:6px"><span class="code">МКБ-10 ${esc(d.icd10)}</span><span class="code">МКБ-11 ${esc(d.icd11)}</span></div>
         <h1>${esc(d.name)}</h1>
+        ${d.et ? `<div class="gloss-et"><span class="lang">ET</span> <span lang="et">${esc(d.et)}</span></div>` : ''}
         <p>${esc(d.core)}</p>
       </div>
       <dl class="facts">
