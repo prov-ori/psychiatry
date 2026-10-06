@@ -134,6 +134,7 @@
           <a class="tool" href="#/symptoms"><span class="tool-ico">${ICONS.eye}</span><div><b>Тренажёр феноменов</b><span>Узнайте симптом по словам пациента</span></div></a>
           <a class="tool" href="#/cards"><span class="tool-ico">${ICONS.cards}</span><div><b>Карточки</b><span>Интервальное повторение терминов и препаратов</span></div></a>
           <a class="tool" href="#/compare"><span class="tool-ico">${ICONS.chart}</span><div><b>Подбор антипсихотика</b><span>Сравните побочные эффекты под конкретного пациента</span></div></a>
+          <a class="tool" href="#/mistakes"><span class="tool-ico">${ICONS.shuffle}</span><div><b>Работа над ошибками${S.mistakeQuestions().length ? ' · ' + S.mistakeQuestions().length : ''}</b><span>Повторите вопросы, на которых ошиблись</span></div></a>
           <a class="tool" href="#/exam"><span class="tool-ico">${ICONS.exam}</span><div><b>Пробный экзамен</b><span>Вопросы по выбранным уровням, с таймером</span></div></a>
         </div>
       </section>
