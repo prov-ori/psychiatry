@@ -5,8 +5,10 @@
 
   /* ---------- Тренажёр феноменов ---------- */
   function symptomOptions(item, rnd = Math.random) {
-    const same = [...new Set(PSY.symptoms.filter(s => s.category === item.category && s.answer !== item.answer).map(s => s.answer))];
-    const other = [...new Set(PSY.symptoms.filter(s => s.answer !== item.answer).map(s => s.answer))];
+    // Варианты, которые для этой цитаты тоже были бы верны, в дистракторы не попадают.
+    const bad = new Set([item.answer].concat(item.exclude || []));
+    const same = [...new Set(PSY.symptoms.filter(s => s.category === item.category && !bad.has(s.answer)).map(s => s.answer))];
+    const other = [...new Set(PSY.symptoms.filter(s => !bad.has(s.answer)).map(s => s.answer))];
     const pool = shuffle(same, rnd).slice(0, 3);
     for (const o of shuffle(other, rnd)) { if (pool.length >= 3) break; if (!pool.includes(o)) pool.push(o); }
     return pool.concat(item.answer);
@@ -173,14 +175,21 @@
           </div>
         </div>
         <div class="grades" id="grades" hidden>
-          <button type="button" class="btn" data-g="again">Не помню<small>через минуту</small></button>
-          <button type="button" class="btn" data-g="hard">С трудом<small>скоро</small></button>
-          <button type="button" class="btn btn-primary" data-g="good">Помню<small>позже</small></button>
+          <button type="button" class="btn" data-g="again">Не помню<small>клавиша 1 · через минуту</small></button>
+          <button type="button" class="btn" data-g="hard">С трудом<small>клавиша 2 · скоро</small></button>
+          <button type="button" class="btn btn-primary" data-g="good">Помню<small>клавиша 3 · позже</small></button>
         </div>`;
       const flash = fw.querySelector('#flash');
       const flip = () => { flash.classList.toggle('flipped'); fw.querySelector('#grades').hidden = false; };
       flash.addEventListener('click', flip);
       flash.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); } });
+      // Клавиши 1/2/3 оценивают карточку после переворота.
+      const onKey = e => {
+        if (!document.body.contains(flash)) { document.removeEventListener('keydown', onKey); return; }
+        const g = { '1': 'again', '2': 'hard', '3': 'good' }[e.key];
+        if (g && !fw.querySelector('#grades').hidden) { document.removeEventListener('keydown', onKey); fw.querySelector(`[data-g="${g}"]`).click(); }
+      };
+      document.addEventListener('keydown', onKey);
       fw.querySelector('#grades').addEventListener('click', e => {
         const b = e.target.closest('button'); if (!b) return;
         S.rateCard(c.id, b.dataset.g);

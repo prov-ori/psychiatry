@@ -112,8 +112,25 @@ lessons.forEach(l => (l.related || []).forEach(r => {
   if (m && !ids.has(m[1])) err(`${l.id}: связанная ссылка на несуществующий урок ${m[1]}`);
 }));
 
+// Длина вариантов не должна подсказывать ответ: правильный не должен быть заметно длиннее остальных.
+const plain = x => String(x).replace(/<[^>]+>/g, '');
+let single = 0, longestCorrect = 0;
+const tells = [];
+function lengthTell(options, correct, where) {
+  const L = options.map(o => plain(o).length);
+  const others = L.filter((_, i) => !correct.includes(i));
+  const top = Math.max(...L);
+  if (correct.length === 1) { single++; if (L[correct[0]] === top) longestCorrect++; }
+  if (correct.length === 1 && correct.some(i => L[i] === top) && top > 25 && top > 1.3 * Math.max(...others)) tells.push(where);
+}
+lessons.forEach(l => l.quiz.forEach((q, i) => lengthTell(q.options, Array.isArray(q.answer) ? q.answer : [q.answer], `${l.id} вопрос ${i + 1}`)));
+PSY.cases.forEach(c => c.stages.forEach((st, i) => lengthTell(st.options.map(o => o.text), [st.options.findIndex(o => o.score === 2)], `${c.id} шаг ${i + 1}`)));
+const share = Math.round(longestCorrect / single * 100);
+if (share > 50) err(`Правильный ответ — самый длинный в ${share}% вопросов: длина подсказывает ответ`);
+tells.forEach(w => err(`${w}: правильный вариант заметно длиннее остальных`));
+
 const quizCount = lessons.reduce((s, l) => s + l.quiz.length, 0);
-console.log(`Уровней: ${PSY.levels.length}, уроков: ${lessons.length}, вопросов: ${quizCount}`);
+console.log(`Уровней: ${PSY.levels.length}, уроков: ${lessons.length}, вопросов: ${quizCount}; правильный = самый длинный: ${share}%`);
 console.log(`Глоссарий: ${PSY.glossary.length}, препаратов: ${PSY.drugs.length}, расстройств: ${PSY.disorders.length}`);
 console.log(`Случаев: ${PSY.cases.length}, феноменов: ${PSY.symptoms.length}, шкал: ${PSY.scales.length}, событий истории: ${PSY.timeline.length}, мнемоник: ${PSY.mnemonics.length}`);
 if (warn.length) console.log(`Предупреждений: ${warn.length}\n  ` + warn.slice(0, 20).join('\n  '));

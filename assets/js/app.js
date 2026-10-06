@@ -34,6 +34,8 @@
       ? `<div class="nav-group">${n.group}</div>`
       : `<a class="nav-link" data-id="${n.id}" href="${n.href}">${ICONS[n.icon]}<span>${n.label}</span></a>`).join('');
     document.getElementById('menuBtn').innerHTML = ICONS.menu;
+    document.getElementById('sideClose').innerHTML = ICONS.x;
+    document.getElementById('searchClose').innerHTML = ICONS.x;
     document.querySelector('.search-ico').innerHTML = ICONS.search;
   }
 
@@ -54,6 +56,7 @@
     const btn = document.getElementById('themeBtn');
     btn.innerHTML = t === 'dark' ? ICONS.moon : t === 'light' ? ICONS.sun : ICONS.auto;
     btn.title = { system: 'Тема: как в системе', light: 'Тема: светлая', dark: 'Тема: тёмная' }[t];
+    document.dispatchEvent(new CustomEvent('psy:theme'));
   }
   function cycleTheme() {
     const order = ['system', 'light', 'dark'];
@@ -116,6 +119,7 @@
     }));
     PSY.disorders.forEach(d => items.push({
       kind: 'Расстройство', title: d.name, sub: `МКБ-10 ${d.icd10} · МКБ-11 ${d.icd11}`, href: '#/disorder/' + d.id,
+      codes: (d.icd10 + ' ' + d.icd11).toLowerCase().split(/[\s/(),]+/).filter(Boolean),
       text: (d.name + ' ' + d.icd10 + ' ' + d.icd11 + ' ' + (d.aka || '')).toLowerCase()
     }));
     PSY.cases.forEach(c => items.push({
@@ -154,7 +158,8 @@
       .map(it => {
         if (!words.every(w => it.text.includes(w))) return null;
         const t = it.title.toLowerCase();
-        const score = (t === query ? 100 : 0) + (t.startsWith(query) ? 50 : 0) + (t.includes(query) ? 20 : 0) + (it.kind === 'Термин' ? 2 : 0);
+        const code = (it.codes || []).some(c => c === query || c.startsWith(query + '.')) ? 90 : 0;
+        const score = code + (t === query ? 100 : 0) + (t.startsWith(query) ? 50 : 0) + (t.includes(query) ? 20 : 0) + (it.kind === 'Урок' ? 0 : 2);
         return { it, score };
       })
       .filter(Boolean)
@@ -175,6 +180,8 @@
       document.body.classList.contains('menu-open') ? closeMenu() : openMenu());
     document.getElementById('scrim').addEventListener('click', () => { closeMenu(); closeSearch(); });
     document.getElementById('searchBtn').addEventListener('click', openSearch);
+    document.getElementById('searchClose').addEventListener('click', closeSearch);
+    document.getElementById('sideClose').addEventListener('click', closeMenu);
     document.getElementById('searchInput').addEventListener('input', e => renderResults(e.target.value));
     document.getElementById('searchInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') { const first = document.querySelector('.search-hit'); if (first) { location.hash = first.getAttribute('href'); closeSearch(); } }
